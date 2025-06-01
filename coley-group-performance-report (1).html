@@ -1,0 +1,954 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Coley Group - Performance Marketing Report</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f6f8;
+            color: #2c3e50;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #1e3a5f 0%, #2c5282 100%);
+            color: white;
+            padding: 50px;
+            text-align: center;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .header::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.05) 0%, transparent 70%);
+            animation: pulse 20s ease-in-out infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+        
+        .header h1 {
+            margin: 0 0 15px 0;
+            font-size: 42px;
+            font-weight: 300;
+            letter-spacing: 2px;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .header .subtitle {
+            font-size: 20px;
+            opacity: 0.95;
+            margin: 10px 0;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .header .date-range {
+            font-size: 16px;
+            opacity: 0.85;
+            margin-top: 20px;
+            padding: 12px 25px;
+            background: rgba(255,255,255,0.15);
+            display: inline-block;
+            border-radius: 25px;
+            backdrop-filter: blur(10px);
+            position: relative;
+            z-index: 1;
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+        
+        .performance-summary {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 25px;
+            margin: -30px auto 40px auto;
+            max-width: 1200px;
+        }
+        
+        .summary-card {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+            text-align: center;
+            transition: all 0.3s ease;
+            border: 1px solid transparent;
+        }
+        
+        .summary-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 30px rgba(0,0,0,0.12);
+        }
+        
+        .summary-card.primary {
+            background: linear-gradient(135deg, #f5f7fa 0%, #e9ecef 100%);
+            border: 2px solid #3498db;
+        }
+        
+        .summary-card .icon {
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, #3498db 0%, #2c5282 100%);
+            border-radius: 50%;
+            margin: 0 auto 20px auto;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            color: white;
+        }
+        
+        .summary-card h3 {
+            margin: 0 0 10px 0;
+            color: #7f8c8d;
+            font-size: 14px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-weight: 600;
+        }
+        
+        .summary-card .value {
+            font-size: 36px;
+            font-weight: 700;
+            color: #2c3e50;
+            margin: 10px 0;
+        }
+        
+        .summary-card .context {
+            font-size: 14px;
+            color: #7f8c8d;
+            margin-top: 10px;
+        }
+        
+        .executive-summary {
+            background: white;
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: 0 2px 15px rgba(0,0,0,0.08);
+            margin-bottom: 40px;
+        }
+        
+        .executive-summary h2 {
+            color: #2c3e50;
+            margin: 0 0 30px 0;
+            font-size: 28px;
+            border-bottom: 3px solid #3498db;
+            padding-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .channel-breakdown {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin: 30px 0;
+        }
+        
+        .channel-card {
+            background: #f8f9fa;
+            padding: 25px;
+            border-radius: 12px;
+            border: 1px solid #e9ecef;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .channel-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 5px;
+            background: linear-gradient(90deg, var(--channel-color) 0%, var(--channel-color-light) 100%);
+        }
+        
+        .channel-card.search { --channel-color: #3498db; --channel-color-light: #5dade2; }
+        .channel-card.display { --channel-color: #e74c3c; --channel-color-light: #ec7063; }
+        .channel-card.pmax { --channel-color: #2ecc71; --channel-color-light: #58d68d; }
+        .channel-card.demand-gen { --channel-color: #f39c12; --channel-color-light: #f5b041; }
+        
+        .channel-card h4 {
+            margin: 0 0 20px 0;
+            color: #2c3e50;
+            font-size: 18px;
+            font-weight: 600;
+        }
+        
+        .channel-metric {
+            display: flex;
+            justify-content: space-between;
+            margin: 12px 0;
+            padding: 8px 0;
+            border-bottom: 1px solid #ecf0f1;
+        }
+        
+        .channel-metric:last-child {
+            border-bottom: none;
+        }
+        
+        .channel-metric .label {
+            color: #7f8c8d;
+            font-size: 14px;
+        }
+        
+        .channel-metric .value {
+            color: #2c3e50;
+            font-weight: 600;
+            font-size: 14px;
+        }
+        
+        .section {
+            background: white;
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: 0 2px 15px rgba(0,0,0,0.08);
+            margin-bottom: 40px;
+        }
+        
+        .section h3 {
+            color: #2c3e50;
+            margin: 0 0 30px 0;
+            font-size: 24px;
+            border-bottom: 2px solid #ecf0f1;
+            padding-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 14px;
+        }
+        
+        th {
+            background: #f8f9fa;
+            color: #2c3e50;
+            font-weight: 600;
+            padding: 15px;
+            text-align: left;
+            border-bottom: 2px solid #e9ecef;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+        
+        td {
+            padding: 15px;
+            border-bottom: 1px solid #ecf0f1;
+        }
+        
+        tr:hover {
+            background: #f8f9fa;
+        }
+        
+        .top-performer {
+            background: #e8f8f5;
+        }
+        
+        .high-conversion {
+            background: #fef9e7;
+        }
+        
+        .performance-badge {
+            display: inline-block;
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+        
+        .performance-badge.excellent {
+            background: #d5f4e6;
+            color: #27ae60;
+        }
+        
+        .performance-badge.good {
+            background: #dbeafe;
+            color: #2563eb;
+        }
+        
+        .performance-badge.average {
+            background: #fef3c7;
+            color: #d97706;
+        }
+        
+        .insights-box {
+            background: #e8f4fd;
+            padding: 30px;
+            border-radius: 12px;
+            border-left: 5px solid #3498db;
+            margin: 25px 0;
+        }
+        
+        .insights-box h4 {
+            margin: 0 0 20px 0;
+            color: #2c5282;
+            font-size: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .insights-box ul {
+            margin: 15px 0;
+            padding-left: 25px;
+        }
+        
+        .insights-box li {
+            margin: 12px 0;
+            color: #34495e;
+            line-height: 1.8;
+        }
+        
+        .recommendations-box {
+            background: #e8f8f5;
+            padding: 30px;
+            border-radius: 12px;
+            border-left: 5px solid #27ae60;
+            margin: 25px 0;
+        }
+        
+        .recommendations-box h4 {
+            margin: 0 0 20px 0;
+            color: #27ae60;
+            font-size: 20px;
+        }
+        
+        .market-performance {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin: 25px 0;
+        }
+        
+        .market-card {
+            background: #f8f9fa;
+            padding: 25px;
+            border-radius: 12px;
+            border: 1px solid #e9ecef;
+            transition: all 0.3s ease;
+        }
+        
+        .market-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+        }
+        
+        .market-card h4 {
+            margin: 0 0 20px 0;
+            color: #2c3e50;
+            font-size: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        
+        .market-metric {
+            display: flex;
+            justify-content: space-between;
+            margin: 12px 0;
+            padding: 10px 0;
+            border-bottom: 1px solid #ecf0f1;
+        }
+        
+        .market-metric:last-child {
+            border-bottom: none;
+        }
+        
+        .demographic-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 30px;
+            margin: 25px 0;
+        }
+        
+        .demographic-chart {
+            background: #f8f9fa;
+            padding: 25px;
+            border-radius: 12px;
+            border: 1px solid #e9ecef;
+        }
+        
+        .demographic-chart h4 {
+            margin: 0 0 20px 0;
+            color: #2c3e50;
+            font-size: 18px;
+        }
+        
+        .footer {
+            text-align: center;
+            padding: 50px 20px;
+            color: #7f8c8d;
+            font-size: 14px;
+        }
+        
+        .footer .logo {
+            font-size: 28px;
+            font-weight: 700;
+            color: #3498db;
+            margin-bottom: 15px;
+        }
+        
+        .performance-bar {
+            background: #e9ecef;
+            height: 8px;
+            border-radius: 4px;
+            overflow: hidden;
+            margin-top: 5px;
+        }
+        
+        .performance-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #3498db 0%, #2ecc71 100%);
+            border-radius: 4px;
+            transition: width 0.3s ease;
+        }
+        
+        @media print {
+            .header {
+                background: #1e3a5f !important;
+                -webkit-print-color-adjust: exact;
+                print-color-adjust: exact;
+            }
+            
+            .section {
+                page-break-inside: avoid;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>The Coley Group</h1>
+        <div class="subtitle">Multi-Channel Real Estate Marketing Performance</div>
+        <div class="subtitle">Presented by Blok.co</div>
+        <div class="date-range">May 1, 2025 - May 30, 2025</div>
+    </div>
+    
+    <div class="container">
+        <!-- Performance Summary Cards -->
+        <div class="performance-summary">
+            <div class="summary-card primary">
+                <div class="icon">🏆</div>
+                <h3>Total Conversions</h3>
+                <div class="value">149</div>
+                <div class="context">High-quality leads generated</div>
+            </div>
+            
+            <div class="summary-card">
+                <div class="icon">💰</div>
+                <h3>Average CPA</h3>
+                <div class="value">$54.25</div>
+                <div class="context">46% below industry avg</div>
+            </div>
+            
+            <div class="summary-card">
+                <div class="icon">📈</div>
+                <h3>Total Investment</h3>
+                <div class="value">$8,083</div>
+                <div class="context">Across 6 channels</div>
+            </div>
+            
+            <div class="summary-card">
+                <div class="icon">🎯</div>
+                <h3>Best Channel ROI</h3>
+                <div class="value">PMax</div>
+                <div class="context">$33.87 CPA</div>
+            </div>
+        </div>
+        
+        <!-- Executive Summary -->
+        <div class="executive-summary">
+            <h2>📊 Executive Summary</h2>
+            
+            <p style="font-size: 18px; line-height: 1.8; color: #34495e;">
+                The Coley Group's multi-channel marketing strategy delivered exceptional results in May 2025, generating <strong>149 high-quality real estate leads</strong> at an average cost of <strong>$54.25 per acquisition</strong>—significantly outperforming the real estate industry average of $100+ CPA. The campaign demonstrated remarkable efficiency across multiple channels, with Performance Max campaigns leading at just $33.87 CPA.
+            </p>
+            
+            <div class="channel-breakdown">
+                <div class="channel-card search">
+                    <h4>Search Campaigns</h4>
+                    <div class="channel-metric">
+                        <span class="label">Leads Generated</span>
+                        <span class="value">65</span>
+                    </div>
+                    <div class="channel-metric">
+                        <span class="label">Conversion Rate</span>
+                        <span class="value">2.93%</span>
+                    </div>
+                    <div class="channel-metric">
+                        <span class="label">Cost Per Lead</span>
+                        <span class="value">$50.86</span>
+                    </div>
+                    <div class="channel-metric">
+                        <span class="label">Investment</span>
+                        <span class="value">$3,306</span>
+                    </div>
+                </div>
+                
+                <div class="channel-card pmax">
+                    <h4>Performance Max</h4>
+                    <div class="channel-metric">
+                        <span class="label">Leads Generated</span>
+                        <span class="value">62</span>
+                    </div>
+                    <div class="channel-metric">
+                        <span class="label">Conversion Rate</span>
+                        <span class="value">3.68%</span>
+                    </div>
+                    <div class="channel-metric">
+                        <span class="label">Cost Per Lead</span>
+                        <span class="value">$33.87</span>
+                    </div>
+                    <div class="channel-metric">
+                        <span class="label">Investment</span>
+                        <span class="value">$2,100</span>
+                    </div>
+                </div>
+                
+                <div class="channel-card display">
+                    <h4>Display Network</h4>
+                    <div class="channel-metric">
+                        <span class="label">Impressions</span>
+                        <span class="value">496,988</span>
+                    </div>
+                    <div class="channel-metric">
+                        <span class="label">Brand Touches</span>
+                        <span class="value">3,414</span>
+                    </div>
+                    <div class="channel-metric">
+                        <span class="label">Assist Conversions</span>
+                        <span class="value">2</span>
+                    </div>
+                    <div class="channel-metric">
+                        <span class="label">Investment</span>
+                        <span class="value">$730</span>
+                    </div>
+                </div>
+                
+                <div class="channel-card demand-gen">
+                    <h4>Demand Gen</h4>
+                    <div class="channel-metric">
+                        <span class="label">Impressions</span>
+                        <span class="value">23,864</span>
+                    </div>
+                    <div class="channel-metric">
+                        <span class="label">Engagement Rate</span>
+                        <span class="value">1.79%</span>
+                    </div>
+                    <div class="channel-metric">
+                        <span class="label">Conversions</span>
+                        <span class="value">1</span>
+                    </div>
+                    <div class="channel-metric">
+                        <span class="label">Investment</span>
+                        <span class="value">$298</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Geographic Performance -->
+        <div class="section">
+            <h3>🗺️ Geographic Market Performance</h3>
+            
+            <div class="market-performance">
+                <div class="market-card">
+                    <h4>Durham <span class="performance-badge excellent">Top Market</span></h4>
+                    <div class="market-metric">
+                        <span class="label">Leads Generated</span>
+                        <span class="value" style="color: #27ae60; font-weight: 700;">12</span>
+                    </div>
+                    <div class="market-metric">
+                        <span class="label">Conversion Rate</span>
+                        <span class="value">3.54%</span>
+                    </div>
+                    <div class="market-metric">
+                        <span class="label">Cost Per Lead</span>
+                        <span class="value">$43.09</span>
+                    </div>
+                    <div class="market-metric">
+                        <span class="label">Investment</span>
+                        <span class="value">$517.07</span>
+                    </div>
+                </div>
+                
+                <div class="market-card">
+                    <h4>Apex <span class="performance-badge good">Strong Performance</span></h4>
+                    <div class="market-metric">
+                        <span class="label">Leads Generated</span>
+                        <span class="value" style="color: #2563eb; font-weight: 700;">7</span>
+                    </div>
+                    <div class="market-metric">
+                        <span class="label">Conversion Rate</span>
+                        <span class="value">3.74%</span>
+                    </div>
+                    <div class="market-metric">
+                        <span class="label">Cost Per Lead</span>
+                        <span class="value">$35.17</span>
+                    </div>
+                    <div class="market-metric">
+                        <span class="label">Investment</span>
+                        <span class="value">$246.16</span>
+                    </div>
+                </div>
+                
+                <div class="market-card">
+                    <h4>Knightdale <span class="performance-badge excellent">Best Conv. Rate</span></h4>
+                    <div class="market-metric">
+                        <span class="label">Leads Generated</span>
+                        <span class="value" style="color: #27ae60; font-weight: 700;">6</span>
+                    </div>
+                    <div class="market-metric">
+                        <span class="label">Conversion Rate</span>
+                        <span class="value" style="color: #27ae60; font-weight: 700;">8.11%</span>
+                    </div>
+                    <div class="market-metric">
+                        <span class="label">Cost Per Lead</span>
+                        <span class="value">$21.12</span>
+                    </div>
+                    <div class="market-metric">
+                        <span class="label">Investment</span>
+                        <span class="value">$126.74</span>
+                    </div>
+                </div>
+            </div>
+            
+            <table style="margin-top: 30px;">
+                <thead>
+                    <tr>
+                        <th>Market Area</th>
+                        <th>Impressions</th>
+                        <th>Clicks</th>
+                        <th>Conversions</th>
+                        <th>Conv. Rate</th>
+                        <th>CPA</th>
+                        <th>Performance</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr class="top-performer">
+                        <td><strong>Durham</strong></td>
+                        <td>4,375</td>
+                        <td>339</td>
+                        <td>12</td>
+                        <td>3.54%</td>
+                        <td>$43.09</td>
+                        <td><span class="performance-badge excellent">Excellent</span></td>
+                    </tr>
+                    <tr class="high-conversion">
+                        <td><strong>Knightdale</strong></td>
+                        <td>704</td>
+                        <td>74</td>
+                        <td>6</td>
+                        <td>8.11%</td>
+                        <td>$21.12</td>
+                        <td><span class="performance-badge excellent">Excellent</span></td>
+                    </tr>
+                    <tr>
+                        <td>Apex</td>
+                        <td>2,175</td>
+                        <td>187</td>
+                        <td>7</td>
+                        <td>3.74%</td>
+                        <td>$35.17</td>
+                        <td><span class="performance-badge good">Good</span></td>
+                    </tr>
+                    <tr>
+                        <td>Raleigh</td>
+                        <td>3,277</td>
+                        <td>258</td>
+                        <td>5</td>
+                        <td>1.94%</td>
+                        <td>$72.11</td>
+                        <td><span class="performance-badge average">Average</span></td>
+                    </tr>
+                    <tr>
+                        <td>Wake Forest</td>
+                        <td>2,098</td>
+                        <td>151</td>
+                        <td>5</td>
+                        <td>3.31%</td>
+                        <td>$42.98</td>
+                        <td><span class="performance-badge good">Good</span></td>
+                    </tr>
+                    <tr>
+                        <td>Chapel Hill</td>
+                        <td>3,234</td>
+                        <td>265</td>
+                        <td>4</td>
+                        <td>1.51%</td>
+                        <td>$88.15</td>
+                        <td><span class="performance-badge average">Average</span></td>
+                    </tr>
+                    <tr>
+                        <td>Zebulon</td>
+                        <td>954</td>
+                        <td>81</td>
+                        <td>4</td>
+                        <td>4.94%</td>
+                        <td>$29.22</td>
+                        <td><span class="performance-badge excellent">Excellent</span></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        
+        <!-- Top Performing Keywords -->
+        <div class="section">
+            <h3>🔑 Top Converting Keywords</h3>
+            
+            <table>
+                <thead>
+                    <tr>
+                        <th>Keyword</th>
+                        <th>Clicks</th>
+                        <th>Cost</th>
+                        <th>Conversions</th>
+                        <th>Conv. Rate</th>
+                        <th>CPA</th>
+                        <th>Performance</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr class="top-performer">
+                        <td><strong>"durham homes for sale"</strong></td>
+                        <td>202</td>
+                        <td>$339.10</td>
+                        <td>9</td>
+                        <td>4.46%</td>
+                        <td>$37.68</td>
+                        <td><span class="performance-badge excellent">Top Performer</span></td>
+                    </tr>
+                    <tr class="high-conversion">
+                        <td><strong>"knightdale nc homes for sale"</strong></td>
+                        <td>45</td>
+                        <td>$69.03</td>
+                        <td>5</td>
+                        <td>11.11%</td>
+                        <td>$13.81</td>
+                        <td><span class="performance-badge excellent">Best CPA</span></td>
+                    </tr>
+                    <tr>
+                        <td>"apex nc homes for sale"</td>
+                        <td>136</td>
+                        <td>$187.34</td>
+                        <td>7</td>
+                        <td>5.15%</td>
+                        <td>$26.76</td>
+                        <td><span class="performance-badge good">Strong</span></td>
+                    </tr>
+                    <tr>
+                        <td>"wake forest homes"</td>
+                        <td>72</td>
+                        <td>$131.26</td>
+                        <td>4</td>
+                        <td>5.56%</td>
+                        <td>$32.81</td>
+                        <td><span class="performance-badge good">Strong</span></td>
+                    </tr>
+                    <tr>
+                        <td>"downtown raleigh homes"</td>
+                        <td>30</td>
+                        <td>$38.25</td>
+                        <td>3</td>
+                        <td>10.00%</td>
+                        <td>$12.75</td>
+                        <td><span class="performance-badge excellent">Excellent</span></td>
+                    </tr>
+                    <tr>
+                        <td>"zebulon nc homes for sale"</td>
+                        <td>67</td>
+                        <td>$98.16</td>
+                        <td>3</td>
+                        <td>4.48%</td>
+                        <td>$32.72</td>
+                        <td><span class="performance-badge good">Good</span></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        
+        <!-- Demographic Performance -->
+        <div class="section">
+            <h3>👥 Audience Demographics Analysis</h3>
+            
+            <div class="demographic-grid">
+                <div class="demographic-chart">
+                    <h4>Household Income Performance</h4>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Income Level</th>
+                                <th>Leads</th>
+                                <th>Conv. Rate</th>
+                                <th>CPA</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr class="top-performer">
+                                <td><strong>Top 10%</strong></td>
+                                <td>23</td>
+                                <td>1.08%</td>
+                                <td>$55.38</td>
+                            </tr>
+                            <tr>
+                                <td>Lower 50%</td>
+                                <td>13</td>
+                                <td>0.28%</td>
+                                <td>$56.04</td>
+                            </tr>
+                            <tr>
+                                <td>11-20%</td>
+                                <td>10</td>
+                                <td>0.86%</td>
+                                <td>$48.66</td>
+                            </tr>
+                            <tr>
+                                <td>31-40%</td>
+                                <td>6</td>
+                                <td>0.71%</td>
+                                <td>$42.47</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                
+                <div class="demographic-chart">
+                    <h4>Age Group Performance</h4>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Age Range</th>
+                                <th>Leads</th>
+                                <th>Conv. Rate</th>
+                                <th>CPA</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr class="top-performer">
+                                <td><strong>25-34</strong></td>
+                                <td>16</td>
+                                <td>1.20%</td>
+                                <td>$40.22</td>
+                            </tr>
+                            <tr class="high-conversion">
+                                <td><strong>18-24</strong></td>
+                                <td>14</td>
+                                <td>2.22%</td>
+                                <td>$26.58</td>
+                            </tr>
+                            <tr>
+                                <td>35-44</td>
+                                <td>13</td>
+                                <td>0.70%</td>
+                                <td>$49.88</td>
+                            </tr>
+                            <tr>
+                                <td>45-54</td>
+                                <td>6</td>
+                                <td>0.29%</td>
+                                <td>$83.42</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Key Insights -->
+        <div class="section">
+            <h3>💡 Campaign Analysis & Insights</h3>
+            
+            <div class="insights-box">
+                <h4>🏆 Performance Highlights</h4>
+                <ul>
+                    <li><strong>Performance Max Excellence:</strong> Achieved lowest CPA at $33.87, generating 62 leads with 3.68% conversion rate—proving the power of Google's AI-driven campaigns</li>
+                    <li><strong>Geographic Winners:</strong> Durham dominates with 12 conversions, while Knightdale shows exceptional 8.11% conversion rate despite lower volume</li>
+                    <li><strong>Young Buyer Opportunity:</strong> 18-24 age group shows highest conversion rate at 2.22% with lowest CPA of $26.58, indicating strong millennial/Gen Z interest</li>
+                    <li><strong>Keyword Efficiency:</strong> "Downtown Raleigh homes" achieves 10% conversion rate at just $12.75 CPA—a premium market at budget prices</li>
+                    <li><strong>Multi-Channel Synergy:</strong> 584,464 total impressions across channels creates strong brand presence supporting direct response efforts</li>
+                </ul>
+            </div>
+            
+            <div class="recommendations-box">
+                <h4>🚀 Strategic Recommendations</h4>
+                <ul>
+                    <li><strong>Scale Performance Max:</strong> Increase PMax budget by 50% to capitalize on $33.87 CPA—well below industry average</li>
+                    <li><strong>Durham Market Expansion:</strong> Create dedicated Durham campaign with neighborhood-specific ad groups (Downtown, Hope Valley, Historic)</li>
+                    <li><strong>Young Buyer Focus:</strong> Develop first-time buyer messaging for 18-34 demographic showing 30 total conversions</li>
+                    <li><strong>Knightdale Opportunity:</strong> Despite only 704 impressions, 8.11% conversion rate suggests significant untapped potential</li>
+                    <li><strong>Search Query Mining:</strong> Implement broad match keywords in top-performing cities to discover new high-intent terms</li>
+                    <li><strong>Seasonal Preparation:</strong> With summer buying season approaching, prepare to scale budgets 30-40% in June</li>
+                </ul>
+            </div>
+        </div>
+        
+        <!-- Next Month Action Plan -->
+        <div class="section">
+            <h3>📅 June 2025 Action Plan</h3>
+            
+            <div class="recommendations-box" style="background: #fef3c7; border-left-color: #f59e0b;">
+                <h4 style="color: #d97706;">Week 1: Immediate Optimizations</h4>
+                <ul>
+                    <li>Increase Performance Max budget from $83/day to $125/day</li>
+                    <li>Pause Youngsville keywords (0 conversions on $58.83 spend)</li>
+                    <li>Add negative keywords for zero-converting terms</li>
+                    <li>Launch Durham neighborhood-specific campaigns</li>
+                </ul>
+            </div>
+            
+            <div class="recommendations-box">
+                <h4>Week 2-3: Expansion Initiatives</h4>
+                <ul>
+                    <li>Test video campaigns targeting 18-34 demographic</li>
+                    <li>Create landing pages for top 5 converting keywords</li>
+                    <li>Implement call tracking for "Raleigh Realtor" campaigns</li>
+                    <li>Launch remarketing campaigns for property page visitors</li>
+                </ul>
+            </div>
+            
+            <div class="recommendations-box" style="background: #e0e7ff; border-left-color: #3730a3;">
+                <h4 style="color: #312e81;">Week 4: Analysis & Scaling</h4>
+                <ul>
+                    <li>Analyze June performance vs. May baseline</li>
+                    <li>Prepare Q3 budget recommendations based on results</li>
+                    <li>Test new markets: Holly Springs and Garner</li>
+                    <li>Develop luxury home campaigns for Top 10% income segment</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    
+    <div class="footer">
+        <div class="logo">Blok.co</div>
+        <p><strong>Digital Marketing Excellence for Real Estate Professionals</strong></p>
+        <p>This report demonstrates The Coley Group's market leadership through strategic multi-channel marketing.</p>
+        <p>149 high-quality leads at 46% below industry-average CPA proves the power of data-driven optimization.</p>
+        <p style="margin-top: 20px;">For campaign adjustments or strategic consultation, contact your Blok.co account team.</p>
+    </div>
+</body>
+</html>
